@@ -87,10 +87,15 @@ app.controller("MainController", function($scope, $window) {
         }else{
             //otherwise, patro/matronymic
             name += ' '+ norn.name[Math.floor(Math.random() * norn.name.length)]
+            //first, check to see if it ends in 's'. If not, append one.
+            if (name[name.length-1]!='s'){
+                name+='s';
+            }
+            //now add dottir or son
             if (Math.random()>0.5){
-                name += 'sdottir';
+                name += 'dottir';
             } else {
-                name+='sson';
+                name+='son';
             }
         }
         return name;

@@ -54,10 +54,11 @@ app.controller("MainController", function($scope, $window) {
         return name;
     };
     $scope.getHuman = function() {
+        //for now, just return a number so we dont crash!
         return Math.random();
     };
     $scope.getCharr = function() {
-        var name = charr.praenomen[Math.floor(Math.random() * charr.praenomen.length)]
+        var name = charr.praenomen[Math.floor(Math.random() * charr.praenomen.length)];
         name += ' ' + charr.nouns[Math.floor(Math.random() * charr.nouns.length)]
         if (Math.random() > .5) {
             //use another noun
@@ -69,14 +70,20 @@ app.controller("MainController", function($scope, $window) {
         return name;
     };
     $scope.getSylvari = function() {
-        return Math.random();
-    };
+        var name = sylvari.name[Math.floor(Math.random() * sylvari.name.length)];
+        //now determine if the veggie has a title.
+        if (Math.random()>0.5){
+            var whichTi = sylvari.titles[Math.floor(Math.random() * sylvari.titles.length)];
+            name  = whichTi + ' ' + name;
+        }
+        return name;
+    }
     $scope.getNorn = function() {
         var name = norn.name[Math.floor(Math.random() * norn.name.length)]
-        
+
         if (Math.random() > 0.5) {
             name += ' ' + charr.nouns[Math.floor(Math.random() * charr.nouns.length)]
-            //50% chance of using the charr last name generator
+                //50% chance of using the charr last name generator
             if (Math.random() > 0.5) {
                 //use another noun
                 name += charr.nouns[Math.floor(Math.random() * charr.nouns.length)].toLowerCase();
@@ -84,18 +91,18 @@ app.controller("MainController", function($scope, $window) {
                 //use an agent
                 name += charr.agents[Math.floor(Math.random() * charr.agents.length)]
             }
-        }else{
+        } else {
             //otherwise, patro/matronymic
-            name += ' '+ norn.name[Math.floor(Math.random() * norn.name.length)]
-            //first, check to see if it ends in 's'. If not, append one.
-            if (name[name.length-1]!='s'){
-                name+='s';
+            name += ' ' + norn.name[Math.floor(Math.random() * norn.name.length)]
+                //first, check to see if it ends in 's'. If not, append one.
+            if (name[name.length - 1] != 's') {
+                name += 's';
             }
             //now add dottir or son
-            if (Math.random()>0.5){
+            if (Math.random() > 0.5) {
                 name += 'dottir';
             } else {
-                name+='son';
+                name += 'son';
             }
         }
         return name;

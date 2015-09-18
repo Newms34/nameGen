@@ -10,20 +10,23 @@
 <body ng-app='main' ng-controller='MainController'>
     <div class='panel panel-success col-md-9 '>
         <div class='panel-heading'>
-            <form class='form-horizontal' id='pickNameForm' role='form' ng-submit='getNames(nameForm,0)'>
+            <form class='form-horizontal' id='pickNameForm' role='form' ng-submit='getNames()'>
                 <div class="form-group">
                     <label class="control-label col-sm-2" for="num">Number of names:</label>
                     <div class="col-md-3 ">{{nameForm.num}}
                         <input type="range" value='0' class='numInp' id="num" ng-model='nameForm.num' min='0' max='500' required/>
                     </div>
                     <label class="control-label col-sm-1" for="email">Parent:</label>
-                    <div class="col-sm-3	">
+                    <div class="col-sm-2">
                         <select class="form-control" id="parentEl" ng-model='nameForm.name' required>
                             <option ng-repeat='raceName in races' value='{{raceName}}' ng-selected='raceName=="Human"'>{{raceName}}</option>
                         </select>
                     </div>
                     <div class="col-sm-2">
                         <button type="submit" id='makeButt' class="btn btn-success">&#10133; Get names!</button>
+                    </div>
+                    <div class="col-sm-1">
+                        <input type='text' placeholder='Search names' ng-disabled='ranOnce == false' ng-model='nameForm.filt'>{{nameForm.filt.length}}
                     </div>
                 </div>
             </form>
@@ -36,7 +39,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat='name in names'>
+                    <tr ng-repeat='name in names | filter:nameForm.filt'>
                         <td>{{name}}</td>
                     </tr>
                 </tbody>

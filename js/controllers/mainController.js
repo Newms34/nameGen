@@ -2,24 +2,27 @@ var app = angular.module("main", []);
 app.controller("MainController", function($scope, $window) {
     $scope.names = ['None yet!'];
     $scope.races = ['Asura', 'Human', 'Charr', 'Sylvari', 'Norn'];
+    $scope.ranOnce = false;
     $scope.nameForm = {
+        name:'Human',
         num: 20
     };
-    $scope.getNames = function(form) {
+    $scope.getNames = function() {
+        $scope.ranOnce = true;
         $scope.names = [];
         var getOneName;
-        if (form.name == 'Asura') {
+        if ($scope.nameForm.name == 'Asura') {
             getOneName = $scope.getAsura;
-        } else if (form.name == 'Human') {
+        } else if ($scope.nameForm.name == 'Human') {
             getOneName = $scope.getHuman;
-        } else if (form.name == 'Charr') {
+        } else if ($scope.nameForm.name == 'Charr') {
             getOneName = $scope.getCharr;
-        } else if (form.name == 'Sylvari') {
+        } else if ($scope.nameForm.name == 'Sylvari') {
             getOneName = $scope.getSylvari;
-        } else if (form.name == 'Norn') {
+        } else if ($scope.nameForm.name == 'Norn') {
             getOneName = $scope.getNorn;
         }
-        for (var i = 0; i < form.num; i++) {
+        for (var i = 0; i < $scope.nameForm.num; i++) {
             var newName = getOneName();
             while ($scope.names.indexOf(newName) != -1) {
                 newName = getOneName();

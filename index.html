@@ -26,7 +26,7 @@
                         <button type="submit" id='makeButt' class="btn btn-success">&#10133; Get names!</button>
                     </div>
                     <div class="col-sm-1">
-                        <input type='text' placeholder='Search names' ng-disabled='ranOnce == false' ng-model='nameForm.filt'>{{nameForm.filt.length}}
+                        <input type='text' placeholder='Search names' ng-disabled='ranOnce == false' ng-model='nameForm.filt'>
                     </div>
                 </div>
             </form>
@@ -35,12 +35,12 @@
             <table class='table table-striped'>
                 <thead>
                     <tr class='info'>
-                        <th>Name:{{names.length}}</th>
+                        <th>Name<span ng-if='names.length>1'>s</span:{{names.length}}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat='name in names | filter:nameForm.filt'>
-                        <td>{{name}}</td>
+                    <tr ng-repeat='name in names | filter:nameForm.filt' >
+                        <td ng-bind-html='name|unsafe'></td>
                     </tr>
                 </tbody>
             </table>

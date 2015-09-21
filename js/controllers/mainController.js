@@ -38,7 +38,10 @@ app.controller("MainController", function($scope, $window, $compile, $q) {
             var asuraLinkProms = [];
             $scope.names.forEach(function(el) {
                 var name = el.split(' ')[1].toLowerCase();
-                asuraLinkProms.push($.get('https://en.wiktionary.org/w/api.php?action=query&format=json&titles=' + name));
+                asuraLinkProms.push($.ajax({
+                    url: 'https://en.wiktionary.org/w/api.php?action=query&format=json&titles=' + name,
+                    dataType:'jsonp'
+                }));
             });
             $q.all(asuraLinkProms).then(function(asuraLinkRes) {
                 console.log('Results of asura gets:', asuraLinkRes);
@@ -60,8 +63,8 @@ app.controller("MainController", function($scope, $window, $compile, $q) {
                                 var title = nameToCompare.length > 1 ? nameToCompare[0] + ' ' : '';
                                 try {
                                     $scope.names[n] = '<a href="https://en.wiktionary.org/wiki/' + nameToCompare[nameToCompare.length - 1].toLowerCase() + '" target = "_blank">' + title + nameToCompare[nameToCompare.length - 1] + '</a>';
-                                }catch(e){
-                                    console.log(nameToCompare,e,nameToCompare.length);
+                                } catch (e) {
+                                    console.log(nameToCompare, e, nameToCompare.length);
                                 }
                             }
                         }

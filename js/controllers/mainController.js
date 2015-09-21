@@ -44,20 +44,16 @@ app.controller("MainController", function($scope, $window, $compile, $q) {
                 }));
             });
             $q.all(asuraLinkProms).then(function(asuraLinkRes) {
-                console.log('Results of asura gets:', asuraLinkRes);
                 //now, search for each element in the original $scope.names array, and replace as needed.
                 for (var i = 0; i < asuraLinkRes.length; i++) {
                     var theNameData = asuraLinkRes[i].query.pages[Object.keys(asuraLinkRes[i].query.pages)[0]];
-                    console.log('We would now be checking:', theNameData)
                     if (theNameData.pageid) {
-                        console.log('-------Wiktionary page id:', theNameData.pageid)
                             //convert to Title Case.
                         theNameData.title = theNameData.title.replace(/\w\S*/g, function(txt) {
                             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
                         });
                         for (var n = 0; n < $scope.names.length; n++) {
                             var nameToCompare = $scope.names[n].split(' '); //we're just interested in the name, not the title.
-                            console.log('testing name:', theNameData.title, 'against', nameToCompare[nameToCompare.length - 1], ' - ', nameToCompare[nameToCompare.length - 1] == theNameData.title);
                             if (nameToCompare[nameToCompare.length - 1] == theNameData.title) {
                                 //Found it!
                                 var title = nameToCompare.length > 1 ? nameToCompare[0] + ' ' : '';

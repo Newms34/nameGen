@@ -40,7 +40,7 @@ app.controller("MainController", function($scope, $window, $compile, $q) {
                 var name = el.split(' ')[1].toLowerCase();
                 asuraLinkProms.push($.ajax({
                     url: 'https://en.wiktionary.org/w/api.php?action=query&format=json&titles=' + name,
-                    dataType:'jsonp'
+                    dataType: 'jsonp'
                 }));
             });
             $q.all(asuraLinkProms).then(function(asuraLinkRes) {
@@ -48,7 +48,7 @@ app.controller("MainController", function($scope, $window, $compile, $q) {
                 for (var i = 0; i < asuraLinkRes.length; i++) {
                     var theNameData = asuraLinkRes[i].query.pages[Object.keys(asuraLinkRes[i].query.pages)[0]];
                     if (theNameData.pageid) {
-                            //convert to Title Case.
+                        //convert to Title Case.
                         theNameData.title = theNameData.title.replace(/\w\S*/g, function(txt) {
                             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
                         });
@@ -66,7 +66,6 @@ app.controller("MainController", function($scope, $window, $compile, $q) {
                         }
                     }
                 }
-
             });
         }
     }
@@ -142,8 +141,11 @@ app.controller("MainController", function($scope, $window, $compile, $q) {
                 name += 's';
             }
             //now add dottir or son
-            if (Math.random() > 0.5) {
+            var whichPat = Math.random();
+            if (whichPat < 0.333) {
                 name += 'dottir';
+            } else if (whichPat < 0.666) {
+                name += 'kin'
             } else {
                 name += 'son';
             }
@@ -156,3 +158,10 @@ app.filter('unsafe', function($sce) {
         return $sce.trustAsHtml(val);
     };
 });
+/*TO DO:
+Humans?
+https://en.wikipedia.org/w/api.php?action=query&format=jsonfm&titles=List_of_common_Chinese_surnames&export returns a (horribly long) list of surnames for chinese, which we could use for canthan
+same with https://en.wikipedia.org/w/api.php?action=query&format=jsonfm&titles=List_of_the_most_popular_given_names_in_South_Korea&export
+and List_of_the_most_common_surnames_in_Europe, for which we'd want ONLY certain nationalities: austria, belgium, denmark, france, germany, luxembourg, norway, spain, portugal, UK (england)
+NORN: Build list of male and female names. males should only get '-son' and females should only get '-dottir'
+*/

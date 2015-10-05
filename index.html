@@ -4,7 +4,7 @@
 <head>
     <title>GW2 Name Generator</title>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
 </head>
 
 <body ng-app='main' ng-controller='MainController'>
@@ -40,12 +40,13 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat='name in names track by $index| filter:nameForm.filt' >
-                        <td ng-bind-html='name|unsafe'></td><td>{{prof[$index]}}</td>
+                        <td ng-bind-html='name|unsafe'></td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
+    <div id='working'>Working!</div>
     <script src='https://code.jquery.com/jquery-1.11.1.js'></script>
     <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.14/angular.min.js'></script>

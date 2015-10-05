@@ -34,8 +34,13 @@ app.controller("MainController", function($scope, $window, $compile, $q) {
                 }
                 $scope.names.push(newName);
             }
-        } else{
+        } else {
             //because its async, human runs itself
+            $('.panel').css({
+                'filter': 'blur(10px)',
+                '-webkit-filter': 'blur(10px)'
+            });
+            $('#working').css('display','block');
             getOneName($scope.nameForm.num);
         }
         if ($scope.nameForm.name === 'Asura') {
@@ -103,7 +108,7 @@ app.controller("MainController", function($scope, $window, $compile, $q) {
     };
     $scope.getHuman = function(numLeft) {
         //for now, just return a number so we dont crash!
-        var nats = ['English', 'German', 'Danish','Scots']; //for now, regrettably, Oriental (Japanese/Chinese) names are not doable, since the wiktionary api cannot return any significant number of Romaji-ified names
+        var nats = ['English', 'German', 'Danish', 'Scots']; //for now, regrettably, Oriental (Japanese/Chinese) names are not doable, since the wiktionary api cannot return any significant number of Romaji-ified names
         var gend = ['female', 'male'];
         var theNat = nats[Math.floor(Math.random() * nats.length)];
         var urlEnd = theNat + '_' + gend[Math.floor(Math.random() * gend.length)] + '_given_names';
@@ -121,22 +126,27 @@ app.controller("MainController", function($scope, $window, $compile, $q) {
                     success: function(lN) {
                         var lName = 'category:';
                         while (!lName.toLowerCase().indexOf('category:') || lName.toLowerCase().indexOf('category:') !== -1) {
-                            console.log('query',lN.query,'theNat',theNat);
+                            console.log('query', lN.query, 'theNat', theNat);
                             lName = lN.query.categorymembers[Math.floor(Math.random() * lN.query.categorymembers.length)].title;
                         }
                         console.log('Name:', fName, lName)
                         $scope.names.push(fName + ' ' + lName);
                         numLeft--;
-                        if (numLeft){
+                        if (numLeft) {
                             $scope.getHuman(numLeft);
-                        } else{
+                        } else {
                             $scope.$digest();
+                            $('.panel').css({
+                                'filter': 'none',
+                                '-webkit-filter': 'none'
+                            });
+                            $('#working').css('display','none');
                         }
                     }
                 });
             }
         });
-        
+
     };
     $scope.getCharr = function() {
         var name = charr.praenomen[Math.floor(Math.random() * charr.praenomen.length)];
@@ -199,8 +209,5 @@ app.filter('unsafe', function($sce) {
 });
 /*TO DO:
 Humans?
-https://en.wikipedia.org/w/api.php?action=query&format=jsonfm&titles=List_of_common_Chinese_surnames&export returns a (horribly long) list of surnames for chinese, which we could use for canthan
-same with https://en.wikipedia.org/w/api.php?action=query&format=jsonfm&titles=List_of_the_most_popular_given_names_in_South_Korea&export
-and List_of_the_most_common_surnames_in_Europe, for which we'd want ONLY certain nationalities: austria, belgium, denmark, france, germany, luxembourg, norway, spain, portugal, UK (england)
-NORN: Build list of male and female names. males should only get '-son' and females should only get '-dottir'
+Add azns.
 */

@@ -3,6 +3,7 @@ app.controller("MainController", function($scope, $window, $compile, $q) {
     $scope.names = ['None yet!'];
     $scope.races = ['Asura', 'Human', 'Charr', 'Sylvari', 'Norn'];
     $scope.ranOnce = false;
+    $scope.prof = [];
     $scope.nameForm = {
         name: 'Human',
         num: 20
@@ -22,16 +23,20 @@ app.controller("MainController", function($scope, $window, $compile, $q) {
         } else if ($scope.nameForm.name == 'Norn') {
             getOneName = $scope.getNorn;
         }
-        for (var i = 0; i < $scope.nameForm.num; i++) {
-            var newName = getOneName();
-            var title = newName.split(' ')[0]
-            var name = newName.split(' ')[1];
-            var nameHTML = '<a href="https://en.wiktionary.org/wiki/' + name + '" target = "_blank">' + newName + '</a>';
-            console.log(nameHTML)
-            while ($scope.names.indexOf(newName) != -1 && $scope.names.indexOf(nameHTML) != -1) {
-                newName = getOneName();
+        if ($scope.nameForm.name !== 'Human') {
+            for (var i = 0; i < $scope.nameForm.num; i++) {
+                var newName = getOneName();
+                var title = newName.split(' ')[0]
+                var name = newName.split(' ')[1];
+                var nameHTML = '<a href="https://en.wiktionary.org/wiki/' + name + '" target = "_blank">' + newName + '</a>';
+                while ($scope.names.indexOf(newName) != -1 && $scope.names.indexOf(nameHTML) != -1) {
+                    newName = getOneName();
+                }
+                $scope.names.push(newName);
             }
-            $scope.names.push(newName);
+        } else{
+            //because its async, human runs itself
+            getOneName($scope.nameForm.num);
         }
         if ($scope.nameForm.name === 'Asura') {
             //Asura, so check wiktionary
@@ -42,6 +47,7 @@ app.controller("MainController", function($scope, $window, $compile, $q) {
                     url: 'https://en.wiktionary.org/w/api.php?action=query&format=json&titles=' + name,
                     dataType: 'jsonp'
                 }));
+                $scope.prof.push('safe');
             });
             $q.all(asuraLinkProms).then(function(asuraLinkRes) {
                 //now, search for each element in the original $scope.names array, and replace as needed.
@@ -95,9 +101,42 @@ app.controller("MainController", function($scope, $window, $compile, $q) {
         return name;
 
     };
-    $scope.getHuman = function() {
+    $scope.getHuman = function(numLeft) {
         //for now, just return a number so we dont crash!
-        return Math.random().toString();
+        var nats = ['English', 'German', 'Danish','Scots']; //for now, regrettably, Oriental (Japanese/Chinese) names are not doable, since the wiktionary api cannot return any significant number of Romaji-ified names
+        var gend = ['female', 'male'];
+        var theNat = nats[Math.floor(Math.random() * nats.length)];
+        var urlEnd = theNat + '_' + gend[Math.floor(Math.random() * gend.length)] + '_given_names';
+        $.ajax({
+            url: 'https://en.wiktionary.org/w/api.php?action=query&list=categorymembers&format=json&cmlimit=450&cmtitle=Category:' + urlEnd,
+            dataType: 'jsonp',
+            success: function(fn) {
+                var fName = 'category:';
+                while (!fName.toLowerCase().indexOf('category:') || fName.toLowerCase().indexOf('category:') !== -1) {
+                    fName = fn.query.categorymembers[Math.floor(Math.random() * fn.query.categorymembers.length)].title;
+                }
+                $.ajax({
+                    url: 'https://en.wiktionary.org/w/api.php?action=query&list=categorymembers&format=json&cmlimit=450&cmtitle=Category:' + theNat + '_surnames',
+                    dataType: 'jsonp',
+                    success: function(lN) {
+                        var lName = 'category:';
+                        while (!lName.toLowerCase().indexOf('category:') || lName.toLowerCase().indexOf('category:') !== -1) {
+                            console.log('query',lN.query,'theNat',theNat);
+                            lName = lN.query.categorymembers[Math.floor(Math.random() * lN.query.categorymembers.length)].title;
+                        }
+                        console.log('Name:', fName, lName)
+                        $scope.names.push(fName + ' ' + lName);
+                        numLeft--;
+                        if (numLeft){
+                            $scope.getHuman(numLeft);
+                        } else{
+                            $scope.$digest();
+                        }
+                    }
+                });
+            }
+        });
+        
     };
     $scope.getCharr = function() {
         var name = charr.praenomen[Math.floor(Math.random() * charr.praenomen.length)];

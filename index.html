@@ -16,7 +16,7 @@
                     <div class="col-md-3 ">{{nameForm.num}}
                         <input type="range" value='0' class='numInp' id="num" ng-model='nameForm.num' min='0' max='500' required/>
                     </div>
-                    <label class="control-label col-sm-1" for="email">Parent:</label>
+                    <label class="control-label col-sm-1" for="email">Race:</label>
                     <div class="col-sm-2">
                         <select class="form-control" id="parentEl" ng-model='nameForm.name' required>
                             <option ng-repeat='raceName in races' value='{{raceName}}' ng-selected='raceName=="Human"'>{{raceName}}</option>

@@ -39,7 +39,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat='name in names track by $index| filter:nameForm.filt' >
+                    <tr ng-repeat='name in names | filter:nameForm.filt track by $index' >
                         <td ng-bind-html='name|unsafe'></td>
                     </tr>
                 </tbody>

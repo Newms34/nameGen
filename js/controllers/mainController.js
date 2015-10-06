@@ -210,4 +210,6 @@ app.filter('unsafe', function($sce) {
 /*TO DO:
 Humans?
 Add azns.
+Add Africans
+Add progress bar for humans (as per gw2-stuffs)
 */

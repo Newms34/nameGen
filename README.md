@@ -5,5 +5,5 @@ Name generator, exploring the possible permutations of different names. Also, he
 ##So, what is this?
 It's a random (lore-friendly!) name generator for the 5 [GW2](http://www.guildwars2.com) races. 
 
-## "0.39451035438105464" doesn't seem like a particularly lore-friendly human/sylvari name!
-That's because it's not. Don't be a wiseguy. I haven't written that part yet.
+##What about different human 'areas'?
+If you mean Canthan, Elonian, etc., I've yet to implement those. I'm having trouble locating a reliable source of north/mid-African names. As for Canthan, which potentially should use East Asian (usually, Chinese with some Japanese), the issue here is that most of the names given are NOT in Romaji/Pinyin. And of course, automatic pinyinizers are not reliable! So just Tyrian names for now. Sorry!

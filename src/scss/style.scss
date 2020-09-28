@@ -4,9 +4,8 @@ html, body{
 	margin:0;
 }
 #working{
-	display:none;
 	position:fixed;
-	margin:top:45%;
+	margin-top:45%;
 	font-size:xx-large;
 	color:#fff;
 	text-align: center;
@@ -15,6 +14,18 @@ html, body{
 	height:100%;
 	transition-duration:.5s;
 }
-.panel{
-	transition-duration:.5s;
+.is-fullheight{
+	min-height:105vh;
+}
+.is-fullwidth{
+	width:100%!important;
+}
+.race-btn{
+	display: inline-block;
+	& img{
+		height:100%;
+	}
+}
+.blocky{
+	display: block!important;
 }

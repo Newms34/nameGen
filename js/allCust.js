@@ -10,7 +10,7 @@ const ra = a => {
 },
     v = new Vue({
         data: {
-            working: false,
+            working: true,
             nameList: [],
             races: [{
                 name: 'Asura',
@@ -23,7 +23,7 @@ const ra = a => {
             }, {
                 name: 'Human',
                 class: 'is-warning',
-                fn: 'fetchHuman'
+                fn: 'getHuman'
             }, {
                 name: 'Norn',
                 class: 'is-info',
@@ -35,6 +35,8 @@ const ra = a => {
             }],
             selectedRace: -1,
             numNames: 10,
+            nationalities:['English', 'German', 'Danish', 'Scots'],
+            selectedGender:false
         },
         methods: {
             getNames() {
@@ -43,11 +45,16 @@ const ra = a => {
                 }
                 this[this.races[this.selectedRace].fn]();
             },
-            getSylvari() {
+            async getSylvari() {
                 this.nameList = [];
-                console.log(sylvari.names.length)
+                this.working=true;
+                const sylNames = [...sylvari.names];
+                const wikiNames = await this.fetchNames('Irish',true);
+                console.log('wikinames!',wikiNames)
+                sylNames.push(...wikiNames.map(q=>({name:q,gender:null})));
                 for (let i = 0; i < this.numNames; i++) {
-                    let name = ra(sylvari.names);
+                    let name = ra(sylNames);
+                    console.log('picked name was',name)
                     this.nameList.push({
                         name: name.name,
                         title: Math.random() > 0.3 ? ra(sylvari.titles) : null,
@@ -56,6 +63,7 @@ const ra = a => {
                         }
                     })
                 }
+                this.working=false;
             },
             getCNLast() {
                 //get a charr-style name for both norn & charr
@@ -118,11 +126,54 @@ const ra = a => {
                     this.nameList.push(n)
                 }
             },
-            fetchHuman() {
+            async getHuman() {
                 this.nameList = [];
+                this.working=true;
+                const givenNat = ra(this.nationalities),
+                    surNat = ra(this.nationalities);
+                console.log('getting names with',givenNat,'first name and',surNat,'last name!')
+                const fns = await this.fetchNames(givenNat,true);
+                const lns = await this.fetchNames(surNat,false);
+                for(let i=0;i<this.numNames;i++){
+                    this.nameList.push({
+                        name:ra(fns)+' '+ra(lns),
+                        notes:{
+                            gender:!this.selectedGender?'male':'female'
+                        }
+                    })
+                }
+                this.working=false;
                 // for (let i=0;i<this.numNames;i++){
                 //     this.nameList.push(`${ra(sylvari.titles)} ${ra(sylvari.names)}`)
                 // }
+            },
+            fetchNames(nationality,isGiven){
+                let baseUrl = `https://en.wiktionary.org/w/api.php?action=query&list=categorymembers&format=json&cmlimit=450&cmtitle=Category:${nationality}_`,
+                    names = [];
+                if(!!isGiven){
+                    baseUrl+=(!this.selectedGender?'male':'female')+'_given_names'
+                }else{
+                    baseUrl+='_surnames';
+                }
+                return new Promise((resolve,reject)=>{
+                    function loopy(url,cont){
+                        let thisUrl =url;
+                        if(!!cont){
+                            thisUrl+='&cmcontinue='+cont;
+                        }
+                        thisUrl+='&origin=*';
+                        fetch(thisUrl).then(r=>r.json()).then(rj=>{
+                            names.push(...rj.query.categorymembers.filter(q=>q.ns===0).map(q=>q.title));
+                            if(rj.continue && rj.continue.cmcontinue){
+                                loopy(url,rj.continue.cmcontinue);
+                            }else{
+                                //th th that's all folks
+                                resolve(names);
+                            }
+                        })
+                    }
+                    loopy(baseUrl);
+                })
             },
             genAsura() {
                 this.nameList = [];
@@ -172,7 +223,9 @@ const ra = a => {
                 })
             },
         },
-        created() { }
+        created() {
+            this.working=false;
+         }
     }).$mount('#main')
 const asura = {
     //594,000 Asura names

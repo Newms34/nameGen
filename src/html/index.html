@@ -47,6 +47,22 @@
                                 </div>
                             </div>
                         </section>
+                        <section class="message has-background-white is-fullwidth" v-if='selectedRace===2'>
+                            <div class="message-body">
+                                <div class="notification has-text-weight-bold">
+                                    Male or female?
+                                </div>
+                                <hr>
+                                <div class="control">
+                                    <label for="male-sel"> 
+                                        <i class="fa fa-mars is-size-3 has-text-info"></i>&nbsp;<input type="radio" v-model='selectedGender' id='male-sel'v-bind:value='false'>
+                                        Male
+                                    </label><br>
+                                    <label for="female-sel"> 
+                                    <i class="fa fa-venus is-size-3 has-text-danger"></i>&nbsp;<input type="radio" v-model='selectedGender' id='female-sel'v-bind:value='true'> Female</label>
+                                </div>
+                            </div>
+                        </section>
                         <section class="message has-background-white is-fullwidth" v-if='selectedRace!==-1'>
                             <div class="message-body">
                                 <div class="notification has-text-weight-bold">
@@ -105,8 +121,12 @@
                 </div>
             </div>
         </div>
+        <div id='working' v-if='working'>
+            <div class='msg'>
+               <span class="loader"></span> Working!
+            </div>
+        </div>
     </div>
-    <div id='working' v-if='working'>Working!</div>
     <script src='https://cdn.jsdelivr.net/npm/vue/dist/vue.js'></script>
     <script src='./js/all.min.js'></script>
 </body>

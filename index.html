@@ -4,7 +4,7 @@
 <head>
     <title>GW2 Name Generator</title>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.0/css/bulma.min.css">
-    <link rel="stylesheet" type="text/css" href="./css/style.969a313f.css">
+    <link rel="stylesheet" type="text/css" href="./css/style.fd6084e7.css">
     <script src="https://kit.fontawesome.com/2094f8a559.js" crossorigin="anonymous"></script>
 </head>
 
@@ -44,6 +44,22 @@
                                 <hr>
                                 <div class="control">
                                     Number of names: <input type="range" class="range" min='1' max='500' v-model='numNames' style='width:50%'> {{numNames}} name<span v-if='numNames!==1'>s</span>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="message has-background-white is-fullwidth" v-if='selectedRace===2'>
+                            <div class="message-body">
+                                <div class="notification has-text-weight-bold">
+                                    Male or female?
+                                </div>
+                                <hr>
+                                <div class="control">
+                                    <label for="male-sel"> 
+                                        <i class="fa fa-mars is-size-3 has-text-info"></i>&nbsp;<input type="radio" v-model='selectedGender' id='male-sel'v-bind:value='false'>
+                                        Male
+                                    </label><br>
+                                    <label for="female-sel"> 
+                                    <i class="fa fa-venus is-size-3 has-text-danger"></i>&nbsp;<input type="radio" v-model='selectedGender' id='female-sel'v-bind:value='true'> Female</label>
                                 </div>
                             </div>
                         </section>
@@ -105,10 +121,14 @@
                 </div>
             </div>
         </div>
+        <div id='working' v-if='working'>
+            <div class='msg'>
+               <span class="loader"></span> Working!
+            </div>
+        </div>
     </div>
-    <div id='working' v-if='working'>Working!</div>
     <script src='https://cdn.jsdelivr.net/npm/vue/dist/vue.js'></script>
-    <script src='./js/all.min.d5c07cdd.js'></script>
+    <script src='./js/all.min.adef8911.js'></script>
 </body>
 
 </html>
